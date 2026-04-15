@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph Data Structures</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+    --amber:  #f5a623;
+    --green:  #4ecb8d;
+    --purple: #a78bfa;
+    --blue:   #60a5fa;
+    --red:    #f87171;
+    --bg:     #0a0a0f;
+    --bg2:    #10101a;
+    --bg3:    #181824;
+    --border: #2a2a3a;
+    --text:   #e8e8f0;
+    --muted:  #8888a8;
+  }
+
+  .reveal-viewport { background: var(--bg); }
+  .reveal .slides section { background: transparent; }
+
+  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
+  .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
+  .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
+  .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
+  .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
+  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
+                 border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+
+  /* -- slide chrome -- */
+  .slide-hdr {
+    display: flex; align-items: center; gap: .4em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .2em; margin-bottom: .3em;
+  }
+  .slide-hdr .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .42em; font-weight: 500;
+    color: var(--bg); background: var(--amber);
+    padding: .1em .4em; border-radius: 3px;
+    letter-spacing: .04em;
+  }
+  .slide-hdr h2 { margin: 0; font-size: .95em; }
+
+  /* -- two-column -- */
+  .cols   { display: grid; gap: .5em; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-6040 { grid-template-columns: 6fr 4fr; }
+  .cols-4060 { grid-template-columns: 4fr 6fr; }
+
+  /* -- cards -- */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; padding: .35em .6em;
+  }
+  .card.amber { border-left: 3px solid var(--amber); }
+  .card.green { border-left: 3px solid var(--green); }
+  .card.purple{ border-left: 3px solid var(--purple); }
+  .card.blue  { border-left: 3px solid var(--blue); }
+  .card.red   { border-left: 3px solid var(--red); }
+  .card h3 { font-size: .64em; margin: 0 0 .12em; }
+  .card p  { font-size: .52em; margin: 0; color: #b8b8d0; }
+  .card ul { margin: 0; padding-left: 1em; }
+  .card li { font-size: .52em; color: #b8b8d0; margin-bottom: .02em; }
+
+  /* -- table -- */
+  .reveal table { width: 100%; border-collapse: collapse; font-size: .5em; }
+  .reveal table th { background: var(--bg3); color: var(--amber); font-weight: 600;
+                     padding: .2em .4em; border: 1px solid var(--border); text-align: left; }
+  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #ccc; }
+  .reveal table tr:nth-child(even) td { background: #0e0e18; }
+
+  /* -- accent spans -- */
+  .a  { color: var(--amber); font-weight: 600; }
+  .g  { color: var(--green); font-weight: 600; }
+  .p  { color: var(--purple); font-weight: 600; }
+  .b  { color: var(--blue); font-weight: 600; }
+  .r  { color: var(--red); font-weight: 600; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* -- SVG graph diagrams -- */
+  svg.diagram { display: block; margin: 0 auto; overflow: visible; }
+
+  /* -- pill badges -- */
+  .pill {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: .44em; padding: .08em .4em; border-radius: 99px;
+    border: 1px solid; margin: 0 .08em;
+  }
+  .pill.amber { color: var(--amber); border-color: var(--amber); }
+  .pill.green { color: var(--green); border-color: var(--green); }
+  .pill.purple{ color: var(--purple); border-color: var(--purple); }
+  .pill.blue  { color: var(--blue); border-color: var(--blue); }
+
+  /* -- footer -- hidden -- */
+  .reveal .slide-footer { display: none; }
+  /* title slide special */
+  .title-slide h1 { font-size: 1.8em; }
+  .title-slide .subtitle {
+    font-size: .7em; color: var(--green); font-family: 'DM Sans', sans-serif;
+    font-weight: 300; letter-spacing: .04em; margin: .3em 0 .6em;
+  }
+  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* -- super-step animator -- */
+  .ss-row {
+    display: flex; gap: .25em; align-items: center;
+    margin: .1em 0; font-size: .55em; font-family: 'JetBrains Mono', monospace;
+  }
+  .ss-node {
+    padding: .2em .55em; border-radius: 5px; font-size: .9em;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+  }
+  .ss-node.active { background: #1a2a1a; border-color: var(--green); color: var(--green); }
+  .ss-node.done   { background: #1a1a2a; border-color: var(--purple); color: var(--purple); }
+  .ss-arrow { color: var(--amber); }
+  .ss-label { font-size: .8em; color: var(--muted); margin-left: .3em; }
+
+  /* reduce default margins */
+  .reveal ul, .reveal ol { margin: .15em 0 .15em 1em; }
+.reveal .slides > section { display: flex !important; flex-direction: column !important; overflow-y: auto !important; align-items: stretch !important; justify-content: flex-start !important; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===============================================================
+  SLIDE 01 -- Title
+================================================================ -->
+<section class="title-slide" data-background-color="#0a0a0f">
+  <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">COMPUTER SCIENCE FUNDAMENTALS SERIES</div>
+  <h1>Graph Data<br>Structures</h1>
+  <div class="subtitle">
+    Adjacency matrix &middot; Adjacency list &middot; CSR format &middot;<br>
+    DAGs &middot; Property graphs &middot; Graph libraries
+  </div>
+  <div style="width:60px; height:3px; background:var(--amber); margin-bottom:1.4em;"></div>
+  <div class="meta">
+    Mid-level software engineer track &nbsp;&middot;&nbsp; 20 slides
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 02 -- Graph Terminology
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">02</span>
+    <h2>Graph Terminology</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <p>A graph <code>G = (V, E)</code> consists of a set of <span class="a">vertices</span> (nodes) and a set of <span class="a">edges</span> (links) connecting them.</p>
+      <table>
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td><strong>Vertex (node)</strong></td><td>A fundamental unit -- represents an entity</td></tr>
+        <tr><td><strong>Edge (link)</strong></td><td>A connection between two vertices</td></tr>
+        <tr><td><strong>Degree</strong></td><td>Number of edges incident to a vertex</td></tr>
+        <tr><td><strong>Path</strong></td><td>Sequence of vertices connected by edges</td></tr>
+        <tr><td><strong>Cycle</strong></td><td>A path that starts and ends at the same vertex</td></tr>
+        <tr><td><strong>Connected</strong></td><td>Every vertex reachable from every other</td></tr>
+        <tr><td><strong>Component</strong></td><td>A maximal connected subgraph</td></tr>
+      </table>
+    </div>
+    <div>
+      <svg class="diagram" viewBox="0 0 240 220" width="240" height="220">
+        <!-- vertices -->
+        <circle cx="120" cy="30" r="18" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="120" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="14">A</text>
+        <circle cx="40" cy="110" r="18" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="40" y="115" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="14">B</text>
+        <circle cx="200" cy="110" r="18" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="200" y="115" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="14">C</text>
+        <circle cx="80" cy="195" r="18" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
+        <text x="80" y="200" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="14">D</text>
+        <circle cx="160" cy="195" r="18" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
+        <text x="160" y="200" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="14">E</text>
+        <!-- edges -->
+        <line x1="105" y1="44" x2="55" y2="96" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="135" y1="44" x2="185" y2="96" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="40" y1="128" x2="80" y2="177" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="200" y1="128" x2="160" y2="177" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="98" y1="195" x2="142" y2="195" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="58" y1="110" x2="182" y2="110" stroke="var(--border)" stroke-width="1.5"/>
+      </svg>
+      <p style="text-align:center; color:var(--muted); font-size:.48em; margin-top:.3em;">5 vertices, 6 edges, connected graph</p>
+    </div>
+  </div>
+  <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Graphs are the most general-purpose data structure -- trees, linked lists, and arrays are all special cases.</p>
+</section>
+
+<!-- ===============================================================
+  SLIDE 03 -- Directed & Undirected Graphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">03</span>
+    <h2>Directed &amp; Undirected Graphs</h2>
+  </div>
+  <div class="cols cols-2">
+    <div class="card green">
+      <h3>Undirected graphs</h3>
+      <p>Edges have no direction. If <code>(u, v)</code> exists, then <code>(v, u)</code> is implied.</p>
+      <ul>
+        <li>Friendships on a social network -- symmetric</li>
+        <li>Road segments allowing traffic in both directions</li>
+        <li>Molecular bonds in chemistry</li>
+      </ul>
+      <div style="text-align:center; margin-top:.4em;">
+        <svg class="diagram" viewBox="0 0 160 60" width="160" height="60">
+          <circle cx="30" cy="30" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+          <text x="30" y="35" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="12">A</text>
+          <circle cx="130" cy="30" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+          <text x="130" y="35" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="12">B</text>
+          <line x1="44" y1="30" x2="116" y2="30" stroke="var(--green)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card amber">
+      <h3>Directed graphs (digraphs)</h3>
+      <p>Each edge has a source and a target. <code>(u, v)</code> does not imply <code>(v, u)</code>.</p>
+      <ul>
+        <li>Twitter follows -- Alice follows Bob &#8800; Bob follows Alice</li>
+        <li>Web hyperlinks -- page A links to page B</li>
+        <li>Dependencies -- module A depends on module B</li>
+      </ul>
+      <div style="text-align:center; margin-top:.4em;">
+        <svg class="diagram" viewBox="0 0 160 60" width="160" height="60">
+          <circle cx="30" cy="30" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+          <text x="30" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="12">A</text>
+          <circle cx="130" cy="30" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+          <text x="130" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="12">B</text>
+          <line x1="44" y1="30" x2="110" y2="30" stroke="var(--amber)" stroke-width="2"/>
+          <polygon points="110,24 122,30 110,36" fill="var(--amber)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Most real-world graphs are directed. Even "undirected" relationships are often stored as two directed edges for implementation simplicity.</p>
+</section>
+
+<!-- ===============================================================
+  SLIDE 04 -- Weighted Graphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">04</span>
+    <h2>Weighted Graphs</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <p>A <span class="a">weighted graph</span> assigns a numeric value (weight, cost, capacity) to each edge. Weights represent distance, latency, bandwidth, probability, or any domain metric.</p>
+      <h3>Where weights matter</h3>
+      <ul>
+        <li><span class="a">Shortest path</span> -- Dijkstra, Bellman-Ford, A* all require edge weights</li>
+        <li><span class="g">Minimum spanning tree</span> -- Kruskal, Prim select lowest-weight edges</li>
+        <li><span class="p">Network flow</span> -- edge weights represent capacities</li>
+        <li><span class="r">Negative weights</span> -- Bellman-Ford handles them; Dijkstra does not</li>
+      </ul>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.5em;">An unweighted graph is a weighted graph where every edge has weight 1.</p>
+    </div>
+    <div>
+      <svg class="diagram" viewBox="0 0 220 200" width="220" height="200">
+        <!-- vertices -->
+        <circle cx="40" cy="30" r="16" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="40" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="13">A</text>
+        <circle cx="180" cy="30" r="16" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="180" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="13">B</text>
+        <circle cx="40" cy="140" r="16" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="40" y="145" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="13">C</text>
+        <circle cx="180" cy="140" r="16" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="180" y="145" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="13">D</text>
+        <circle cx="180" cy="190" r="16" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
+        <text x="180" y="195" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="13">E</text>
+        <!-- edges with weights -->
+        <line x1="56" y1="30" x2="164" y2="30" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="110" y="22" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">5</text>
+        <line x1="40" y1="46" x2="40" y2="124" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="28" y="85" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">2</text>
+        <line x1="180" y1="46" x2="180" y2="124" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="192" y="85" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">3</text>
+        <line x1="56" y1="140" x2="164" y2="140" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="110" y="155" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">7</text>
+        <line x1="180" y1="156" x2="180" y2="174" stroke="var(--border)" stroke-width="1.5"/>
+        <text x="192" y="170" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">1</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 05 -- Adjacency Matrix
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">05</span>
+    <h2>Adjacency Matrix</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <p>For a graph with <code>n</code> vertices, allocate an <code>n x n</code> matrix <code>M</code>. <code>M[i][j] = 1</code> if edge <code>(i, j)</code> exists, <code>0</code> otherwise. For weighted graphs, store the weight.</p>
+      <pre><code>Vertices: A=0  B=1  C=2  D=3
+
+     A  B  C  D
+A [  0  1  1  0 ]
+B [  1  0  0  1 ]
+C [  1  0  0  1 ]
+D [  0  1  1  0 ]</code></pre>
+    </div>
+    <div>
+      <h3>Characteristics</h3>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td><strong>Space</strong></td><td><code>O(V<sup>2</sup>)</code> -- regardless of edge count</td></tr>
+        <tr><td><strong>Edge lookup</strong></td><td><code>O(1)</code> -- direct array access</td></tr>
+        <tr><td><strong>Add edge</strong></td><td><code>O(1)</code></td></tr>
+        <tr><td><strong>Iterate neighbours</strong></td><td><code>O(V)</code> -- must scan entire row</td></tr>
+        <tr><td><strong>Add vertex</strong></td><td><code>O(V<sup>2</sup>)</code> -- reallocate matrix</td></tr>
+      </table>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Best for dense graphs where <code>|E|</code> approaches <code>|V|<sup>2</sup></code>. Wastes memory on sparse graphs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 06 -- Adjacency List
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">06</span>
+    <h2>Adjacency List</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <p>Each vertex stores a list (array, linked list, or hash set) of its neighbours. The <span class="a">most common representation</span> in practice.</p>
+      <pre><code>A -> [B, C]
+B -> [A, D]
+C -> [A, D]
+D -> [B, C]</code></pre>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.3em;">Default choice for most graph algorithms. BFS and DFS run in <code>O(V + E)</code> -- optimal.</p>
+    </div>
+    <div>
+      <h3>Characteristics</h3>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td><strong>Space</strong></td><td><code>O(V + E)</code> -- proportional to graph size</td></tr>
+        <tr><td><strong>Edge lookup</strong></td><td><code>O(degree)</code> or <code>O(1)</code> with hash set</td></tr>
+        <tr><td><strong>Add edge</strong></td><td><code>O(1)</code> -- append to list</td></tr>
+        <tr><td><strong>Iterate neighbours</strong></td><td><code>O(degree)</code> -- direct traversal</td></tr>
+        <tr><td><strong>Add vertex</strong></td><td><code>O(1)</code> -- append new list</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 07 -- Matrix vs List Trade-offs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">07</span>
+    <h2>Matrix vs List -- Trade-offs</h2>
+  </div>
+  <table>
+    <tr><th>Criterion</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr>
+    <tr><td>Space complexity</td><td><code>O(V<sup>2</sup>)</code></td><td><code>O(V + E)</code></td></tr>
+    <tr><td>Edge existence check</td><td><code>O(1)</code></td><td><code>O(degree)</code></td></tr>
+    <tr><td>Iterate all neighbours</td><td><code>O(V)</code></td><td><code>O(degree)</code></td></tr>
+    <tr><td>Add / remove edge</td><td><code>O(1)</code></td><td><code>O(1)</code> add / <code>O(degree)</code> remove</td></tr>
+    <tr><td>Dense graph performance</td><td>Excellent</td><td>Wasteful pointer overhead</td></tr>
+    <tr><td>Sparse graph performance</td><td>Wasteful memory</td><td>Excellent</td></tr>
+    <tr><td>Cache locality</td><td>Good (contiguous)</td><td>Poor (pointer chasing)</td></tr>
+    <tr><td>Matrix operations</td><td>Natural (multiply, transpose)</td><td>Requires conversion</td></tr>
+  </table>
+  <div class="cols cols-2" style="margin-top:.5em;">
+    <div class="card amber">
+      <h3>Prefer the matrix</h3>
+      <ul>
+        <li>Dense graphs (<code>|E| &gt; |V|<sup>2</sup>/4</code>)</li>
+        <li>Frequent edge-existence queries</li>
+        <li>Matrix algebra (spectral methods, PageRank)</li>
+        <li>Small graphs (under ~1000 vertices)</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Prefer the list</h3>
+      <ul>
+        <li>Sparse graphs (most real-world graphs)</li>
+        <li>Traversal algorithms (BFS, DFS, Dijkstra)</li>
+        <li>Dynamic graphs with frequent mutations</li>
+        <li>Memory-constrained environments</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 08 -- Edge List & Incidence Matrix
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">08</span>
+    <h2>Edge List &amp; Incidence Matrix</h2>
+  </div>
+  <div class="cols cols-2">
+    <div class="card green">
+      <h3>Edge list</h3>
+      <p>Store edges as a flat list of <code>(source, target, weight)</code> tuples. Simplest possible representation.</p>
+      <pre><code>[(A,B,5), (A,C,2), (B,D,3),
+ (C,D,7), (D,E,1)]</code></pre>
+      <ul>
+        <li><span class="a">Space:</span> <code>O(E)</code></li>
+        <li><span class="a">Edge lookup:</span> <code>O(E)</code> -- linear scan</li>
+        <li><span class="a">Best for:</span> Kruskal's algorithm (sort by weight), input parsing, serialisation</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>Incidence matrix</h3>
+      <p>An <code>|V| x |E|</code> matrix. Column <code>j</code> has <code>+1</code> at source, <code>-1</code> at target (directed), or <code>1</code> at both endpoints (undirected).</p>
+      <pre><code>       e1  e2  e3  e4
+  A [   1   1   0   0 ]
+  B [   1   0   1   0 ]
+  C [   0   1   0   1 ]
+  D [   0   0   1   1 ]</code></pre>
+      <ul>
+        <li><span class="a">Space:</span> <code>O(V * E)</code></li>
+        <li><span class="a">Use case:</span> theoretical analysis, network flow, circuit modelling</li>
+      </ul>
+    </div>
+  </div>
+  <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Edge lists are underrated for batch processing. Many distributed graph frameworks (Spark GraphX) use edge-list partitioning internally.</p>
+</section>
+
+<!-- ===============================================================
+  SLIDE 09 -- Compressed Sparse Row (CSR)
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">09</span>
+    <h2>Compressed Sparse Row (CSR)</h2>
+  </div>
+  <p>CSR stores a sparse adjacency structure using <span class="a">three flat arrays</span>, eliminating pointer overhead and maximising cache locality.</p>
+  <div class="cols cols-6040">
+    <div>
+      <pre><code>Graph:  0->[1,3]  1->[2]  2->[3]  3->[]
+
+row_ptr: [0, 2, 3, 4, 4]
+col_idx: [1, 3, 2, 3]
+values:  [1, 1, 1, 1]</code></pre>
+      <table>
+        <tr><th>Array</th><th>Size</th><th>Purpose</th></tr>
+        <tr><td><code>row_ptr</code></td><td><code>V + 1</code></td><td>Start index in col_idx for each vertex</td></tr>
+        <tr><td><code>col_idx</code></td><td><code>E</code></td><td>Concatenated sorted neighbour indices</td></tr>
+        <tr><td><code>values</code></td><td><code>E</code></td><td>Edge weights (omit for unweighted)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Characteristics</h3>
+      <ul>
+        <li><span class="a">Space:</span> <code>O(V + E)</code> with minimal overhead</li>
+        <li><span class="g">Neighbour iteration:</span> contiguous memory scan -- cache-friendly</li>
+        <li><span class="p">Edge lookup:</span> binary search within row -- <code>O(log degree)</code></li>
+        <li><span class="r">Weakness:</span> static -- inserting edges requires full rebuild</li>
+      </ul>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Standard format for high-performance graph libraries (Boost Graph, SuiteSparse, cuGraph) and GPU graph processing. CSC (Compressed Sparse Column) enables efficient in-neighbour access.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 10 -- Implicit Graphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">10</span>
+    <h2>Implicit Graphs</h2>
+  </div>
+  <p>An implicit graph generates vertices and edges <span class="a">on demand</span> via a function rather than storing them in memory. The graph exists logically but is never fully materialised.</p>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div>
+      <h3>Examples</h3>
+      <div class="card blue" style="margin-bottom:.3em;">
+        <h3>Grid / lattice</h3>
+        <p>Vertex <code>(r, c)</code> connects to <code>(r+/-1, c)</code> and <code>(r, c+/-1)</code>. An <code>n x n</code> grid has <code>n<sup>2</sup></code> vertices but the adjacency structure is never allocated.</p>
+      </div>
+      <div class="card purple" style="margin-bottom:.3em;">
+        <h3>State-space search</h3>
+        <p>Puzzle states (Rubik's cube, 15-puzzle) are vertices; legal moves are edges. Billions of nodes but BFS explores only a fraction.</p>
+      </div>
+      <div class="card green">
+        <h3>Game trees</h3>
+        <p>Chess positions are vertices; legal moves are edges. ~10<sup>47</sup> positions -- fully materialising the tree is impossible.</p>
+      </div>
+    </div>
+    <div>
+      <h3>Neighbour function pattern</h3>
+      <pre><code class="language-python">def neighbours(state):
+    for move in legal_moves(state):
+        yield apply(move, state)
+
+# BFS with implicit graph
+from collections import deque
+def bfs(start, goal):
+    queue = deque([start])
+    visited = {start}
+    while queue:
+        node = queue.popleft()
+        if node == goal:
+            return True
+        for nbr in neighbours(node):
+            if nbr not in visited:
+                visited.add(nbr)
+                queue.append(nbr)
+    return False</code></pre>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.3em;">If your graph has more than ~10<sup>8</sup> vertices, implicit representation combined with BFS, DFS, or A* is the only practical option.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 11 -- Multigraphs & Hypergraphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">11</span>
+    <h2>Multigraphs &amp; Hypergraphs</h2>
+  </div>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Multigraphs</h3>
+      <p>Allow <strong>multiple edges</strong> (parallel edges) between the same pair of vertices, and optionally <strong>self-loops</strong>.</p>
+      <ul>
+        <li>Flight routes -- multiple airlines between same cities</li>
+        <li>Communication networks -- multiple links between routers</li>
+        <li>Representation: adjacency list with edge IDs</li>
+      </ul>
+      <pre><code>A ==[flight_101]==> B
+A ==[flight_202]==> B
+A ==[flight_303]==> B</code></pre>
+    </div>
+    <div class="card purple">
+      <h3>Hypergraphs</h3>
+      <p>A <strong>hyperedge</strong> connects an arbitrary number of vertices (not just two). Generalises the edge concept.</p>
+      <ul>
+        <li>Database schemas -- a table (hyperedge) relates multiple columns</li>
+        <li>Co-authorship -- a paper connects all its authors</li>
+        <li>VLSI design -- a net connects multiple pins</li>
+      </ul>
+      <p style="margin-top:.3em; color:var(--muted);">Standard graph algorithms do not apply directly. Common approach: expand to a bipartite graph.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 12 -- Bipartite Graphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">12</span>
+    <h2>Bipartite Graphs</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <p>A graph whose vertices can be divided into two disjoint sets <span class="a">U</span> and <span class="g">V</span> such that every edge connects a vertex in U to a vertex in V. <span class="r">No edge within the same set.</span></p>
+      <h3>Detection: BFS 2-colouring</h3>
+      <ol>
+        <li>Pick any unvisited vertex, colour it <span class="a">red</span></li>
+        <li>Colour all neighbours <span class="b">blue</span></li>
+        <li>Colour their uncoloured neighbours <span class="a">red</span></li>
+        <li>If a neighbour already has the same colour -- <span class="r">not bipartite</span></li>
+        <li>Repeat for disconnected components</li>
+      </ol>
+      <p style="font-size:.48em; color:var(--muted);">Time complexity: <code>O(V + E)</code>. A graph is bipartite iff it contains no odd-length cycle.</p>
+    </div>
+    <div>
+      <svg class="diagram" viewBox="0 0 200 200" width="200" height="200">
+        <!-- U partition -->
+        <rect x="10" y="10" width="70" height="180" rx="8" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4"/>
+        <text x="45" y="28" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">U</text>
+        <circle cx="45" cy="60" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="45" y="64" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u1</text>
+        <circle cx="45" cy="110" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="45" y="114" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u2</text>
+        <circle cx="45" cy="160" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="45" y="164" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u3</text>
+        <!-- V partition -->
+        <rect x="120" y="10" width="70" height="180" rx="8" fill="none" stroke="var(--green)" stroke-width="1" stroke-dasharray="4"/>
+        <text x="155" y="28" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">V</text>
+        <circle cx="155" cy="85" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="155" y="89" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">v1</text>
+        <circle cx="155" cy="135" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="155" y="139" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">v2</text>
+        <!-- edges U->V only -->
+        <line x1="59" y1="60" x2="141" y2="85" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="59" y1="110" x2="141" y2="85" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="59" y1="110" x2="141" y2="135" stroke="var(--border)" stroke-width="1.5"/>
+        <line x1="59" y1="160" x2="141" y2="135" stroke="var(--border)" stroke-width="1.5"/>
+      </svg>
+      <h3 style="margin-top:.3em;">Applications</h3>
+      <ul>
+        <li><span class="a">Job matching</span> -- workers to tasks (Hungarian algorithm)</li>
+        <li><span class="g">Recommendations</span> -- users to items</li>
+        <li><span class="p">Scheduling</span> -- time slots to courses</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 13 -- DAGs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">13</span>
+    <h2>DAGs -- Directed Acyclic Graphs</h2>
+  </div>
+  <div class="cols cols-6040">
+    <div>
+      <p>A <span class="a">directed acyclic graph</span> is a directed graph with <span class="r">no cycles</span>. Every DAG has at least one topological ordering.</p>
+      <h3>Key properties</h3>
+      <ul>
+        <li>At least one vertex with in-degree 0 (source) and one with out-degree 0 (sink)</li>
+        <li>Longest path is finite and computable in <code>O(V + E)</code></li>
+        <li>Number of paths between two vertices can be exponential</li>
+        <li>Transitive closure and reduction are well-defined</li>
+      </ul>
+      <h3>Cycle detection</h3>
+      <p>Run DFS and check for <span class="r">back edges</span> -- an edge to a vertex currently on the recursion stack. If found, the graph has a cycle and is not a DAG.</p>
+    </div>
+    <div>
+      <h3>Why DAGs matter</h3>
+      <table>
+        <tr><th>Application</th><th>Vertices</th><th>Edges</th></tr>
+        <tr><td>Build systems (Make, Bazel)</td><td>Tasks</td><td>Dependencies</td></tr>
+        <tr><td>Package managers (npm, pip)</td><td>Packages</td><td>Version deps</td></tr>
+        <tr><td>Data pipelines (Airflow)</td><td>Stages</td><td>Data flow</td></tr>
+        <tr><td>Git commit history</td><td>Commits</td><td>Parent ptrs</td></tr>
+        <tr><td>Spreadsheet formulas</td><td>Cells</td><td>Cell refs</td></tr>
+        <tr><td>Neural network layers</td><td>Layers</td><td>Data flow</td></tr>
+      </table>
+      <svg class="diagram" viewBox="0 0 220 80" width="220" height="80" style="margin-top:.4em;">
+        <circle cx="30" cy="40" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
+        <text x="30" y="44" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">A</text>
+        <circle cx="90" cy="20" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="90" y="24" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">B</text>
+        <circle cx="90" cy="60" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
+        <text x="90" y="64" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">C</text>
+        <circle cx="150" cy="40" r="14" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
+        <text x="150" y="44" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="11">D</text>
+        <circle cx="210" cy="40" r="14" fill="var(--bg3)" stroke="var(--blue)" stroke-width="2"/>
+        <text x="210" y="44" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="11">E</text>
+        <!-- directed edges -->
+        <line x1="44" y1="34" x2="76" y2="24" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="44" y1="46" x2="76" y2="56" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="104" y1="24" x2="136" y2="36" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="104" y1="56" x2="136" y2="44" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="164" y1="40" x2="196" y2="40" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <defs><marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--amber)"/></marker></defs>
+      </svg>
+      <p style="text-align:center; font-size:.44em; color:var(--muted);">Topological order: A, B, C, D, E</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 14 -- Topological Sort
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">14</span>
+    <h2>Topological Sort</h2>
+  </div>
+  <p>Produces an ordering of vertices such that for every directed edge <code>(u, v)</code>, vertex <code>u</code> appears before <code>v</code>. Only possible on <span class="a">DAGs</span>.</p>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div class="card amber">
+      <h3>Kahn's algorithm (BFS-based)</h3>
+      <pre><code>1. Compute in-degree for every vertex
+2. Enqueue all vertices with in-degree 0
+3. While queue is not empty:
+   a. Dequeue vertex u, append to result
+   b. For each neighbour v of u:
+      - Decrement in-degree of v
+      - If in-degree becomes 0, enqueue v
+4. If result length != |V|, cycle exists</code></pre>
+      <p>Time: <code>O(V + E)</code> &nbsp; Space: <code>O(V)</code></p>
+    </div>
+    <div class="card green">
+      <h3>DFS-based approach</h3>
+      <pre><code>1. Run DFS from each unvisited vertex
+2. On finishing a vertex (all descendants
+   explored), push it onto a stack
+3. Pop the stack to get topological order</code></pre>
+      <p>Time: <code>O(V + E)</code> &nbsp; Space: <code>O(V)</code></p>
+      <p style="margin-top:.3em; color:var(--muted);">Multiple valid orderings may exist. Kahn's can be adapted to find all orderings or detect a unique one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 15 -- Graph Storage in Databases
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">15</span>
+    <h2>Graph Storage in Databases</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <h3>Native graph databases</h3>
+      <p>Store vertices and edges as first-class objects with <span class="a">index-free adjacency</span> -- each node physically points to its neighbours.</p>
+      <div style="margin-top:.3em;">
+        <span class="pill amber">Neo4j</span>
+        <span class="pill green">Neptune</span>
+        <span class="pill purple">TigerGraph</span>
+        <span class="pill blue">Memgraph</span>
+      </div>
+      <h3 style="margin-top:.5em;">Relational graph storage</h3>
+      <pre><code class="language-sql">CREATE TABLE vertices (
+  id    INTEGER PRIMARY KEY,
+  label VARCHAR(64),
+  props JSONB
+);
+CREATE TABLE edges (
+  src    INTEGER REFERENCES vertices(id),
+  dst    INTEGER REFERENCES vertices(id),
+  label  VARCHAR(64),
+  weight FLOAT,
+  PRIMARY KEY (src, dst, label)
+);</code></pre>
+    </div>
+    <div>
+      <h3>Trade-offs</h3>
+      <table>
+        <tr><th>Feature</th><th>Native Graph DB</th><th>Relational</th></tr>
+        <tr><td>Multi-hop traversal</td><td>Fast (pointer chasing)</td><td>Slow (recursive JOINs)</td></tr>
+        <tr><td>Ad-hoc analytics</td><td>Limited</td><td>Excellent (SQL)</td></tr>
+        <tr><td>ACID transactions</td><td>Varies</td><td>Mature</td></tr>
+        <tr><td>Ecosystem / tooling</td><td>Smaller</td><td>Enormous</td></tr>
+        <tr><td>Schema flexibility</td><td>High</td><td>Rigid</td></tr>
+        <tr><td>Aggregation queries</td><td>Weak</td><td>Strong</td></tr>
+      </table>
+      <p style="color:var(--muted); font-size:.48em; margin-top:.4em;">Use a native graph DB when your core access pattern is multi-hop traversal. Use relational when you also need joins, aggregation, and mature tooling.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 16 -- Property Graphs & RDF
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">16</span>
+    <h2>Property Graphs &amp; RDF</h2>
+  </div>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Property graph model</h3>
+      <p>Vertices and edges carry <strong>labels</strong> and arbitrary <strong>key-value properties</strong>. Dominant model in industry.</p>
+      <pre><code class="language-cypher">(:Person {name:"Alice", age:30})
+  -[:FOLLOWS {since:2023}]->
+(:Person {name:"Bob", age:28})</code></pre>
+      <p style="margin-top:.3em;">Query languages:</p>
+      <div>
+        <span class="pill amber">Cypher</span>
+        <span class="pill amber">Gremlin</span>
+        <span class="pill amber">GQL (ISO 2024)</span>
+      </div>
+    </div>
+    <div class="card purple">
+      <h3>RDF (Resource Description Framework)</h3>
+      <p>Data as <strong>triples</strong>: <code>(subject, predicate, object)</code>. Every entity is a URI. W3C standard for the Semantic Web.</p>
+      <pre><code>&lt;:Alice&gt;  &lt;:follows&gt;  &lt;:Bob&gt; .
+&lt;:Alice&gt;  &lt;:age&gt;      "30"^^xsd:integer .
+&lt;:Bob&gt;    &lt;:worksAt&gt;  &lt;:Acme&gt; .</code></pre>
+      <p style="margin-top:.3em;">Query language:</p>
+      <div>
+        <span class="pill purple">SPARQL</span>
+      </div>
+    </div>
+  </div>
+  <table style="margin-top:.5em;">
+    <tr><th>Aspect</th><th>Property Graph</th><th>RDF</th></tr>
+    <tr><td>Schema</td><td>Optional labels + constraints</td><td>Ontologies (OWL, RDFS)</td></tr>
+    <tr><td>Strength</td><td>Application development</td><td>Data integration, linked data</td></tr>
+    <tr><td>Ecosystem</td><td>Neo4j, TigerGraph, Memgraph</td><td>Wikidata, DBpedia, knowledge graphs</td></tr>
+  </table>
+</section>
+
+<!-- ===============================================================
+  SLIDE 17 -- Graph Libraries & Frameworks
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">17</span>
+    <h2>Graph Libraries &amp; Frameworks</h2>
+  </div>
+  <div class="cols cols-3" style="margin-top:.3em;">
+    <div class="card green">
+      <h3>Python</h3>
+      <ul>
+        <li><span class="a">NetworkX</span> -- pure Python, rich algorithms, great for prototyping</li>
+        <li><span class="a">igraph</span> -- C core with Python bindings, much faster</li>
+        <li><span class="a">graph-tool</span> -- C++/Boost core, best performance in Python</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <h3>Java / JVM</h3>
+      <ul>
+        <li><span class="a">JGraphT</span> -- pure Java, extensive algorithms, well-documented</li>
+        <li><span class="a">TinkerPop / Gremlin</span> -- vendor-neutral graph traversal framework</li>
+        <li><span class="a">Neo4j Java Driver</span> -- native access from JVM</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>C++</h3>
+      <ul>
+        <li><span class="a">Boost Graph Library</span> -- generic, header-only, STL-style</li>
+        <li><span class="a">LEMON</span> -- lightweight with LP solver integration</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cols cols-3" style="margin-top:.3em;">
+    <div class="card blue">
+      <h3>Distributed / Large-scale</h3>
+      <ul>
+        <li><span class="a">Spark GraphX</span> -- distributed on Spark RDDs</li>
+        <li><span class="a">Pregel / Giraph</span> -- vertex-centric BSP model</li>
+        <li><span class="a">NVIDIA cuGraph</span> -- GPU-accelerated, CSR-based</li>
+      </ul>
+    </div>
+    <div class="card green" style="grid-column: span 2;">
+      <h3>Selection guidance</h3>
+      <table>
+        <tr><th>Need</th><th>Library</th></tr>
+        <tr><td>Quick prototyping, &lt;100K edges</td><td>NetworkX</td></tr>
+        <tr><td>Large graphs in Python (&gt;1M edges)</td><td>igraph or graph-tool</td></tr>
+        <tr><td>Production Java application</td><td>JGraphT</td></tr>
+        <tr><td>High-performance C++ pipeline</td><td>Boost Graph Library</td></tr>
+        <tr><td>Billion-edge distributed processing</td><td>Spark GraphX / Pregel</td></tr>
+        <tr><td>GPU-accelerated analytics</td><td>NVIDIA cuGraph</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 18 -- Choosing the Right Representation
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">18</span>
+    <h2>Choosing the Right Representation</h2>
+  </div>
+  <table>
+    <tr><th>Scenario</th><th>Representation</th><th>Reason</th></tr>
+    <tr><td>Sparse, dynamic graph</td><td><span class="a">Adjacency list</span> (hash map)</td><td>O(V+E) space, fast traversal, easy mutation</td></tr>
+    <tr><td>Dense graph or matrix algebra</td><td><span class="a">Adjacency matrix</span></td><td>O(1) edge lookup, spectral methods</td></tr>
+    <tr><td>Static analysis, HPC, GPU</td><td><span class="a">CSR / CSC</span></td><td>Cache-friendly, minimal memory</td></tr>
+    <tr><td>Edge-centric algorithms (Kruskal)</td><td><span class="a">Edge list</span></td><td>Sort by weight, union-find</td></tr>
+    <tr><td>Enormous state space (AI search)</td><td><span class="a">Implicit graph</span></td><td>Generate on demand, never materialise</td></tr>
+    <tr><td>Persistent storage with queries</td><td><span class="a">Property graph DB</span></td><td>Index-free adjacency, Cypher/Gremlin</td></tr>
+    <tr><td>Linked data / knowledge graph</td><td><span class="a">RDF triple store</span></td><td>Standards-based, federated queries</td></tr>
+    <tr><td>Multiple edge types, same nodes</td><td><span class="a">Multigraph adj. list</span></td><td>Edge IDs distinguish parallel edges</td></tr>
+  </table>
+  <div class="card green" style="margin-top:.5em;">
+    <h3>Rule of thumb</h3>
+    <p>Start with an <strong>adjacency list</strong>. Move to <strong>CSR</strong> when profiling shows memory or cache bottlenecks. Move to a <strong>graph database</strong> when you need persistence and multi-hop queries at scale.</p>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 19 -- Applications of Graphs
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">19</span>
+    <h2>Applications of Graphs</h2>
+  </div>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div class="card amber">
+      <h3>Social networks</h3>
+      <p>Vertices = users; edges = follows/friendships. Graph algorithms power friend suggestions (common neighbours), influence scoring (PageRank), and community detection (Louvain).</p>
+    </div>
+    <div class="card green">
+      <h3>Road maps &amp; navigation</h3>
+      <p>Intersections = vertices; road segments = weighted edges. Dijkstra, A*, and contraction hierarchies enable real-time routing in Google Maps, Waze, and OSRM.</p>
+    </div>
+    <div class="card purple">
+      <h3>Dependency graphs</h3>
+      <p>Packages, modules, or build targets as vertices; imports as edges. Topological sort determines build order; cycle detection prevents circular dependencies.</p>
+    </div>
+    <div class="card blue">
+      <h3>Knowledge graphs</h3>
+      <p>Entities and relationships modelled as a graph -- Google Knowledge Graph, Wikidata. Power semantic search, question answering, and recommendation.</p>
+    </div>
+  </div>
+  <div class="cols cols-2" style="margin-top:.3em;">
+    <div class="card red">
+      <h3>Compiler optimisation</h3>
+      <p>Control flow graphs, data flow graphs, SSA form. Graph analyses drive dead code elimination, register allocation, and instruction scheduling.</p>
+    </div>
+    <div class="card amber">
+      <h3>Bioinformatics &amp; fraud detection</h3>
+      <p>Protein interaction networks, genome assembly (de Bruijn graphs). Transaction graphs reveal suspicious patterns via subgraph matching in fraud detection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===============================================================
+  SLIDE 20 -- Summary & Further Reading
+================================================================ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr">
+    <span class="tag">20</span>
+    <h2>Summary &amp; Further Reading</h2>
+  </div>
+  <div class="cols cols-2">
+    <div>
+      <h3>Key takeaways</h3>
+      <ul>
+        <li>A graph <code>G = (V, E)</code> is the most flexible data structure -- trees, lists, and matrices are all special cases</li>
+        <li><span class="a">Adjacency list</span> is the default choice -- <code>O(V + E)</code> space, optimal traversal</li>
+        <li><span class="g">Adjacency matrix</span> excels at dense graphs and matrix algebra</li>
+        <li><span class="p">CSR format</span> is essential for HPC and GPU graph processing</li>
+        <li><span class="b">DAGs</span> underpin build systems, data pipelines, version control, and scheduling</li>
+        <li><span class="a">Property graph DBs</span> and <span class="p">RDF triple stores</span> serve different persistence needs</li>
+        <li>Choose representation based on density, mutation frequency, and algorithm requirements</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Recommended reading</h3>
+      <table>
+        <tr><th>Source</th><th>Description</th></tr>
+        <tr><td><strong>Cormen et al.</strong></td><td><em>Introduction to Algorithms</em> (CLRS) -- chapters 22-26</td></tr>
+        <tr><td><strong>Skiena</strong></td><td><em>The Algorithm Design Manual</em> -- practical graph problem taxonomy</td></tr>
+        <tr><td><strong>Needham &amp; Hodler</strong></td><td><em>Graph Algorithms</em> (O'Reilly) -- Neo4j and Spark</td></tr>
+        <tr><td><strong>NetworkX Docs</strong></td><td><a href="https://networkx.org" style="color:var(--blue)">networkx.org</a></td></tr>
+        <tr><td><strong>Boost Graph</strong></td><td><a href="https://www.boost.org/doc/libs/release/libs/graph/doc/" style="color:var(--blue)">boost.org/libs/graph</a></td></tr>
+        <tr><td><strong>Neo4j Academy</strong></td><td><a href="https://graphacademy.neo4j.com" style="color:var(--blue)">graphacademy.neo4j.com</a></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  transition: 'fade',
+  transitionSpeed: 'fast',
+  controls: true,
+  progress: true,
+  center: false,
+  width: 1100,
+  height: 900,
+  margin: 0.01,
+  plugins: [RevealHighlight],
+  highlight: { theme: 'monokai' }
+});
+</script>
+<script>
+(function(){
+  var h = Reveal.getConfig().height || 900;
+  var m = Reveal.getConfig().margin || 0.02;
+  var maxH = Math.floor(h * (1 - 2 * m)) + 'px';
+  function fixSlides(){
+    document.querySelectorAll('.reveal .slides>section,.reveal .slides>section>section').forEach(function(s){
+      s.style.display = 'block';
+      s.style.maxHeight = maxH;
+    });
+  }
+  Reveal.on('ready', fixSlides);
+  Reveal.on('slidechanged', fixSlides);
+})();
+</script>
+</body>
+</html>
