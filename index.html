@@ -6,7 +6,7 @@
   <title>Graph Data Structures</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,17 +14,17 @@
 
   <style>
   :root {
-    --amber:  #f5a623;
-    --green:  #4ecb8d;
-    --purple: #a78bfa;
-    --blue:   #60a5fa;
-    --red:    #f87171;
-    --bg:     #0a0a0f;
-    --bg2:    #10101a;
-    --bg3:    #181824;
-    --border: #2a2a3a;
-    --text:   #e8e8f0;
-    --muted:  #8888a8;
+    --amber:  #bf7d10;
+    --green:  #1c815a;
+    --purple: #6435bc;
+    --blue:   #2b3dc5;
+    --red:    #db3a30;
+    --bg:     #fafaf8;
+    --bg2:    #f1f1ee;
+    --bg3:    #eaeae6;
+    --border: #d1d1cb;
+    --text:   #161616;
+    --muted:  #6a6a63;
   }
 
   .reveal-viewport { background: var(--bg); }
@@ -40,7 +40,7 @@
   .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
   .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
                  border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
-  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #242422; }
 
   /* -- slide chrome -- */
   .slide-hdr {
@@ -75,16 +75,16 @@
   .card.blue  { border-left: 3px solid var(--blue); }
   .card.red   { border-left: 3px solid var(--red); }
   .card h3 { font-size: .64em; margin: 0 0 .12em; }
-  .card p  { font-size: .52em; margin: 0; color: #b8b8d0; }
+  .card p  { font-size: .52em; margin: 0; color: #3d3d39; }
   .card ul { margin: 0; padding-left: 1em; }
-  .card li { font-size: .52em; color: #b8b8d0; margin-bottom: .02em; }
+  .card li { font-size: .52em; color: #3d3d39; margin-bottom: .02em; }
 
   /* -- table -- */
   .reveal table { width: 100%; border-collapse: collapse; font-size: .5em; }
   .reveal table th { background: var(--bg3); color: var(--amber); font-weight: 600;
                      padding: .2em .4em; border: 1px solid var(--border); text-align: left; }
-  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #ccc; }
-  .reveal table tr:nth-child(even) td { background: #0e0e18; }
+  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #2d2d2b; }
+  .reveal table tr:nth-child(even) td { background: #f3f3f1; }
 
   /* -- accent spans -- */
   .a  { color: var(--amber); font-weight: 600; }
@@ -127,8 +127,8 @@
     padding: .2em .55em; border-radius: 5px; font-size: .9em;
     background: var(--bg3); border: 1px solid var(--border); color: var(--text);
   }
-  .ss-node.active { background: #1a2a1a; border-color: var(--green); color: var(--green); }
-  .ss-node.done   { background: #1a1a2a; border-color: var(--purple); color: var(--purple); }
+  .ss-node.active { background: #d3e1d5; border-color: var(--green); color: var(--green); }
+  .ss-node.done   { background: #e6e6e2; border-color: var(--purple); color: var(--purple); }
   .ss-arrow { color: var(--amber); }
   .ss-label { font-size: .8em; color: var(--muted); margin-left: .3em; }
 
@@ -136,6 +136,7 @@
   .reveal ul, .reveal ol { margin: .15em 0 .15em 1em; }
 .reveal .slides > section { display: flex !important; flex-direction: column !important; overflow-y: auto !important; align-items: stretch !important; justify-content: flex-start !important; }
 </style>
+<style>.reveal .slide-number{background-color:transparent}</style>
 </head>
 <body>
 <div class="reveal">
@@ -144,7 +145,7 @@
 <!-- ===============================================================
   SLIDE 01 -- Title
 ================================================================ -->
-<section class="title-slide" data-background-color="#0a0a0f">
+<section class="title-slide" data-background-color="#fafaf8">
   <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">COMPUTER SCIENCE FUNDAMENTALS SERIES</div>
   <h1>Graph Data<br>Structures</h1>
   <div class="subtitle">
@@ -160,7 +161,7 @@
 <!-- ===============================================================
   SLIDE 02 -- Graph Terminology
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">02</span>
     <h2>Graph Terminology</h2>
@@ -209,7 +210,7 @@
 <!-- ===============================================================
   SLIDE 03 -- Directed & Undirected Graphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">03</span>
     <h2>Directed &amp; Undirected Graphs</h2>
@@ -259,7 +260,7 @@
 <!-- ===============================================================
   SLIDE 04 -- Weighted Graphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">04</span>
     <h2>Weighted Graphs</h2>
@@ -308,7 +309,7 @@
 <!-- ===============================================================
   SLIDE 05 -- Adjacency Matrix
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">05</span>
     <h2>Adjacency Matrix</h2>
@@ -342,7 +343,7 @@ D [  0  1  1  0 ]</code></pre>
 <!-- ===============================================================
   SLIDE 06 -- Adjacency List
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">06</span>
     <h2>Adjacency List</h2>
@@ -373,7 +374,7 @@ D -> [B, C]</code></pre>
 <!-- ===============================================================
   SLIDE 07 -- Matrix vs List Trade-offs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">07</span>
     <h2>Matrix vs List -- Trade-offs</h2>
@@ -414,7 +415,7 @@ D -> [B, C]</code></pre>
 <!-- ===============================================================
   SLIDE 08 -- Edge List & Incidence Matrix
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">08</span>
     <h2>Edge List &amp; Incidence Matrix</h2>
@@ -451,7 +452,7 @@ D -> [B, C]</code></pre>
 <!-- ===============================================================
   SLIDE 09 -- Compressed Sparse Row (CSR)
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">09</span>
     <h2>Compressed Sparse Row (CSR)</h2>
@@ -487,7 +488,7 @@ values:  [1, 1, 1, 1]</code></pre>
 <!-- ===============================================================
   SLIDE 10 -- Implicit Graphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">10</span>
     <h2>Implicit Graphs</h2>
@@ -537,7 +538,7 @@ def bfs(start, goal):
 <!-- ===============================================================
   SLIDE 11 -- Multigraphs & Hypergraphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">11</span>
     <h2>Multigraphs &amp; Hypergraphs</h2>
@@ -571,7 +572,7 @@ A ==[flight_303]==> B</code></pre>
 <!-- ===============================================================
   SLIDE 12 -- Bipartite Graphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">12</span>
     <h2>Bipartite Graphs</h2>
@@ -626,7 +627,7 @@ A ==[flight_303]==> B</code></pre>
 <!-- ===============================================================
   SLIDE 13 -- DAGs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">13</span>
     <h2>DAGs -- Directed Acyclic Graphs</h2>
@@ -682,7 +683,7 @@ A ==[flight_303]==> B</code></pre>
 <!-- ===============================================================
   SLIDE 14 -- Topological Sort
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">14</span>
     <h2>Topological Sort</h2>
@@ -716,7 +717,7 @@ A ==[flight_303]==> B</code></pre>
 <!-- ===============================================================
   SLIDE 15 -- Graph Storage in Databases
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">15</span>
     <h2>Graph Storage in Databases</h2>
@@ -764,7 +765,7 @@ CREATE TABLE edges (
 <!-- ===============================================================
   SLIDE 16 -- Property Graphs & RDF
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">16</span>
     <h2>Property Graphs &amp; RDF</h2>
@@ -806,7 +807,7 @@ CREATE TABLE edges (
 <!-- ===============================================================
   SLIDE 17 -- Graph Libraries & Frameworks
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">17</span>
     <h2>Graph Libraries &amp; Frameworks</h2>
@@ -863,7 +864,7 @@ CREATE TABLE edges (
 <!-- ===============================================================
   SLIDE 18 -- Choosing the Right Representation
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">18</span>
     <h2>Choosing the Right Representation</h2>
@@ -888,7 +889,7 @@ CREATE TABLE edges (
 <!-- ===============================================================
   SLIDE 19 -- Applications of Graphs
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">19</span>
     <h2>Applications of Graphs</h2>
@@ -926,7 +927,7 @@ CREATE TABLE edges (
 <!-- ===============================================================
   SLIDE 20 -- Summary & Further Reading
 ================================================================ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#fafaf8">
   <div class="slide-hdr">
     <span class="tag">20</span>
     <h2>Summary &amp; Further Reading</h2>
