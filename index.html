@@ -10,7 +10,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Azeret+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
   <style>
   :root {
@@ -30,14 +30,14 @@
   .reveal-viewport { background: var(--bg); }
   .reveal .slides section { background: transparent; }
 
-  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
-  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal { font-family: 'Schibsted Grotesk', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Schibsted Grotesk', serif; font-weight: 700; }
   .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
   .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
   .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
   .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
   .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
-  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal code { font-family: 'Azeret Mono', monospace; font-size: .72em; }
   .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
                  border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
   .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #242422; }
@@ -49,7 +49,7 @@
     padding-bottom: .2em; margin-bottom: .3em;
   }
   .slide-hdr .tag {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Azeret Mono', monospace;
     font-size: .42em; font-weight: 500;
     color: var(--bg); background: var(--amber);
     padding: .1em .4em; border-radius: 3px;
@@ -92,14 +92,14 @@
   .p  { color: var(--purple); font-weight: 600; }
   .b  { color: var(--blue); font-weight: 600; }
   .r  { color: var(--red); font-weight: 600; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
+  .mono { font-family: 'Azeret Mono', monospace; }
 
   /* -- SVG graph diagrams -- */
   svg.diagram { display: block; margin: 0 auto; overflow: visible; }
 
   /* -- pill badges -- */
   .pill {
-    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    display: inline-block; font-family: 'Azeret Mono', monospace;
     font-size: .44em; padding: .08em .4em; border-radius: 99px;
     border: 1px solid; margin: 0 .08em;
   }
@@ -113,15 +113,15 @@
   /* title slide special */
   .title-slide h1 { font-size: 1.8em; }
   .title-slide .subtitle {
-    font-size: .7em; color: var(--green); font-family: 'DM Sans', sans-serif;
+    font-size: .7em; color: var(--green); font-family: 'Schibsted Grotesk', sans-serif;
     font-weight: 300; letter-spacing: .04em; margin: .3em 0 .6em;
   }
-  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'Azeret Mono', monospace; }
 
   /* -- super-step animator -- */
   .ss-row {
     display: flex; gap: .25em; align-items: center;
-    margin: .1em 0; font-size: .55em; font-family: 'JetBrains Mono', monospace;
+    margin: .1em 0; font-size: .55em; font-family: 'Azeret Mono', monospace;
   }
   .ss-node {
     padding: .2em .55em; border-radius: 5px; font-size: .9em;
@@ -146,7 +146,7 @@
   SLIDE 01 -- Title
 ================================================================ -->
 <section class="title-slide" data-background-color="#fafaf8">
-  <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">COMPUTER SCIENCE FUNDAMENTALS SERIES</div>
+  <div style="font-family:'Azeret Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">COMPUTER SCIENCE FUNDAMENTALS SERIES</div>
   <h1>Graph Data<br>Structures</h1>
   <div class="subtitle">
     Adjacency matrix &middot; Adjacency list &middot; CSR format &middot;<br>
@@ -184,15 +184,15 @@
       <svg class="diagram" viewBox="0 0 240 220" width="240" height="220">
         <!-- vertices -->
         <circle cx="120" cy="30" r="18" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="120" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="14">A</text>
+        <text x="120" y="35" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="14">A</text>
         <circle cx="40" cy="110" r="18" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="40" y="115" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="14">B</text>
+        <text x="40" y="115" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="14">B</text>
         <circle cx="200" cy="110" r="18" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="200" y="115" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="14">C</text>
+        <text x="200" y="115" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="14">C</text>
         <circle cx="80" cy="195" r="18" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
-        <text x="80" y="200" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="14">D</text>
+        <text x="80" y="200" text-anchor="middle" fill="var(--purple)" font-family="Azeret Mono" font-size="14">D</text>
         <circle cx="160" cy="195" r="18" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
-        <text x="160" y="200" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="14">E</text>
+        <text x="160" y="200" text-anchor="middle" fill="var(--purple)" font-family="Azeret Mono" font-size="14">E</text>
         <!-- edges -->
         <line x1="105" y1="44" x2="55" y2="96" stroke="var(--border)" stroke-width="1.5"/>
         <line x1="135" y1="44" x2="185" y2="96" stroke="var(--border)" stroke-width="1.5"/>
@@ -227,9 +227,9 @@
       <div style="text-align:center; margin-top:.4em;">
         <svg class="diagram" viewBox="0 0 160 60" width="160" height="60">
           <circle cx="30" cy="30" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-          <text x="30" y="35" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="12">A</text>
+          <text x="30" y="35" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="12">A</text>
           <circle cx="130" cy="30" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-          <text x="130" y="35" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="12">B</text>
+          <text x="130" y="35" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="12">B</text>
           <line x1="44" y1="30" x2="116" y2="30" stroke="var(--green)" stroke-width="2"/>
         </svg>
       </div>
@@ -245,9 +245,9 @@
       <div style="text-align:center; margin-top:.4em;">
         <svg class="diagram" viewBox="0 0 160 60" width="160" height="60">
           <circle cx="30" cy="30" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-          <text x="30" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="12">A</text>
+          <text x="30" y="35" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="12">A</text>
           <circle cx="130" cy="30" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-          <text x="130" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="12">B</text>
+          <text x="130" y="35" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="12">B</text>
           <line x1="44" y1="30" x2="110" y2="30" stroke="var(--amber)" stroke-width="2"/>
           <polygon points="110,24 122,30 110,36" fill="var(--amber)"/>
         </svg>
@@ -281,26 +281,26 @@
       <svg class="diagram" viewBox="0 0 220 200" width="220" height="200">
         <!-- vertices -->
         <circle cx="40" cy="30" r="16" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="40" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="13">A</text>
+        <text x="40" y="35" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="13">A</text>
         <circle cx="180" cy="30" r="16" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="180" y="35" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="13">B</text>
+        <text x="180" y="35" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="13">B</text>
         <circle cx="40" cy="140" r="16" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="40" y="145" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="13">C</text>
+        <text x="40" y="145" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="13">C</text>
         <circle cx="180" cy="140" r="16" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="180" y="145" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="13">D</text>
+        <text x="180" y="145" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="13">D</text>
         <circle cx="180" cy="190" r="16" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
-        <text x="180" y="195" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="13">E</text>
+        <text x="180" y="195" text-anchor="middle" fill="var(--purple)" font-family="Azeret Mono" font-size="13">E</text>
         <!-- edges with weights -->
         <line x1="56" y1="30" x2="164" y2="30" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="110" y="22" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">5</text>
+        <text x="110" y="22" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="12" font-weight="600">5</text>
         <line x1="40" y1="46" x2="40" y2="124" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="28" y="85" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">2</text>
+        <text x="28" y="85" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="12" font-weight="600">2</text>
         <line x1="180" y1="46" x2="180" y2="124" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="192" y="85" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">3</text>
+        <text x="192" y="85" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="12" font-weight="600">3</text>
         <line x1="56" y1="140" x2="164" y2="140" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="110" y="155" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">7</text>
+        <text x="110" y="155" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="12" font-weight="600">7</text>
         <line x1="180" y1="156" x2="180" y2="174" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="192" y="170" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="12" font-weight="600">1</text>
+        <text x="192" y="170" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="12" font-weight="600">1</text>
       </svg>
     </div>
   </div>
@@ -594,20 +594,20 @@ A ==[flight_303]==> B</code></pre>
       <svg class="diagram" viewBox="0 0 200 200" width="200" height="200">
         <!-- U partition -->
         <rect x="10" y="10" width="70" height="180" rx="8" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4"/>
-        <text x="45" y="28" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">U</text>
+        <text x="45" y="28" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="11">U</text>
         <circle cx="45" cy="60" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="45" y="64" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u1</text>
+        <text x="45" y="64" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="11">u1</text>
         <circle cx="45" cy="110" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="45" y="114" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u2</text>
+        <text x="45" y="114" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="11">u2</text>
         <circle cx="45" cy="160" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="45" y="164" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">u3</text>
+        <text x="45" y="164" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="11">u3</text>
         <!-- V partition -->
         <rect x="120" y="10" width="70" height="180" rx="8" fill="none" stroke="var(--green)" stroke-width="1" stroke-dasharray="4"/>
-        <text x="155" y="28" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">V</text>
+        <text x="155" y="28" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="11">V</text>
         <circle cx="155" cy="85" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="155" y="89" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">v1</text>
+        <text x="155" y="89" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="11">v1</text>
         <circle cx="155" cy="135" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="155" y="139" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">v2</text>
+        <text x="155" y="139" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="11">v2</text>
         <!-- edges U->V only -->
         <line x1="59" y1="60" x2="141" y2="85" stroke="var(--border)" stroke-width="1.5"/>
         <line x1="59" y1="110" x2="141" y2="85" stroke="var(--border)" stroke-width="1.5"/>
@@ -658,15 +658,15 @@ A ==[flight_303]==> B</code></pre>
       </table>
       <svg class="diagram" viewBox="0 0 220 80" width="220" height="80" style="margin-top:.4em;">
         <circle cx="30" cy="40" r="14" fill="var(--bg3)" stroke="var(--amber)" stroke-width="2"/>
-        <text x="30" y="44" text-anchor="middle" fill="var(--amber)" font-family="JetBrains Mono" font-size="11">A</text>
+        <text x="30" y="44" text-anchor="middle" fill="var(--amber)" font-family="Azeret Mono" font-size="11">A</text>
         <circle cx="90" cy="20" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="90" y="24" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">B</text>
+        <text x="90" y="24" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="11">B</text>
         <circle cx="90" cy="60" r="14" fill="var(--bg3)" stroke="var(--green)" stroke-width="2"/>
-        <text x="90" y="64" text-anchor="middle" fill="var(--green)" font-family="JetBrains Mono" font-size="11">C</text>
+        <text x="90" y="64" text-anchor="middle" fill="var(--green)" font-family="Azeret Mono" font-size="11">C</text>
         <circle cx="150" cy="40" r="14" fill="var(--bg3)" stroke="var(--purple)" stroke-width="2"/>
-        <text x="150" y="44" text-anchor="middle" fill="var(--purple)" font-family="JetBrains Mono" font-size="11">D</text>
+        <text x="150" y="44" text-anchor="middle" fill="var(--purple)" font-family="Azeret Mono" font-size="11">D</text>
         <circle cx="210" cy="40" r="14" fill="var(--bg3)" stroke="var(--blue)" stroke-width="2"/>
-        <text x="210" y="44" text-anchor="middle" fill="var(--blue)" font-family="JetBrains Mono" font-size="11">E</text>
+        <text x="210" y="44" text-anchor="middle" fill="var(--blue)" font-family="Azeret Mono" font-size="11">E</text>
         <!-- directed edges -->
         <line x1="44" y1="34" x2="76" y2="24" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
         <line x1="44" y1="46" x2="76" y2="56" stroke="var(--border)" stroke-width="1.5" marker-end="url(#arrow)"/>
